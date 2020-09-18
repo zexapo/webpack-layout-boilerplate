@@ -11,9 +11,45 @@ const PATHS = {
   build: path.join(__dirname, 'build'),
   assets: 'assets/',
 };
-
+/*
+В массив pagesName добавляем названия страниц без типа файла
+Для корректной работы необходимо создать соответствующие файлы pug, scss, js в папке pages
+Для каждой страницы в pages своя папка
+*/
+const pagesName = ['index', 'ui-kit'];
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
+
+// Генерация точек входа
+const entry = (pages) => {
+  const objEntry = {};
+  pages.forEach((item) => {
+    //  находится в корне src
+    const pathEntry = item === 'index' ? `${PATHS.src}` : `${PATHS.src}/pages/${item}`;
+    objEntry[item] = [`${pathEntry}/${item}.js`, `${pathEntry}/${item}.scss`];
+  });
+  return objEntry;
+};
+
+// Генерация HTML страниц
+
+const createPages = (pages) => {
+  const pagesHTML = [];
+  pages.forEach((item, i) => {
+    pagesHTML[i] = new HtmlWebpackPlugin({
+      filename: item === 'index' ? `${item}.html` : `pages/${item}.html`,
+      chunks: [item],
+      template:
+        item === 'index'
+          ? `./src/${item}.pug`
+          : `./src/pages/${item}/${item}.pug`,
+      minify: {
+        collapseWhitespace: isProd,
+      },
+    });
+  });
+  return pagesHTML;
+};
 
 const optimization = () => {
   const config = {
@@ -33,10 +69,7 @@ const optimization = () => {
 };
 
 module.exports = {
-  entry: {
-    index: [`${PATHS.src}/index.js`, `${PATHS.src}/index.scss`],
-    blog: [`${PATHS.src}/pages/page2.js`, `${PATHS.src}/pages/page2.scss`],
-  },
+  entry: entry(pagesName),
   output: {
     path: PATHS.build,
     filename: 'js/[name].[hash].js',
@@ -47,6 +80,11 @@ module.exports = {
   },
   devtool: isDev ? 'source-map' : '',
   optimization: optimization(),
+  resolve: {
+    alias: {
+      '~': PATHS.src, // Example: import Dog from "~/assets/img/dog.jpg"
+    },
+  },
   module: {
     rules: [
       {
@@ -57,6 +95,7 @@ module.exports = {
             options: {
               hmr: isDev,
               reloadAll: true,
+              publicPath: '../../', // обеспечивает правильный относительный путь в css
             },
           },
           'css-loader',
@@ -64,11 +103,17 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|svg|gif)$/,
-        use: ['file-loader'],
+        loader: 'file-loader',
+        options: {
+          name: 'assets/image/[name].[ext]',
+        },
       },
       {
         test: /\.(ttf|woff|woff2|eot)$/,
-        use: ['file-loader'],
+        loader: 'file-loader',
+        options: {
+          name: 'assets/fonts/[name].[ext]',
+        },
       },
       {
         test: /\.pug$/,
@@ -85,6 +130,7 @@ module.exports = {
             options: {
               hmr: isDev,
               reloadAll: true,
+              publicPath: '../../', // обеспечивает правильный относительный путь в css
             },
           },
           'css-loader',
@@ -108,30 +154,15 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: `${PATHS.assets}css/[name].[hash].css`,
     }),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      chunks: ['index'],
-      template: './src/index.pug',
-      minify: {
-        collapseWhitespace: isProd,
-      },
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'pages/page2.html',
-      chunks: ['blog'],
-      template: './src/pages/page2.pug',
-      minify: {
-        collapseWhitespace: isProd,
-      },
-    }),
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'src/assets'),
+          from: path.resolve(__dirname, 'src/assets/static'),
           to: path.resolve(__dirname, 'build/assets'),
         },
       ],
     }),
+    ...createPages(pagesName),
   ],
 
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
