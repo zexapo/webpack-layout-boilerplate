@@ -1,0 +1,8 @@
+mixin button(name, size='big', colored='color', arrow=false)
+  -let buttonClass=size==='big'?'button':size==='small'?'button button_small':'button button_middle';
+  -let buttonInner=colored==='color'?'button__inner':'button__inner button__inner_white';
+  -let buttoArrow=arrow!=='arrow'?'button__arrow':'button__arrow button__arrow_visible';
+  button(type=button class=buttonClass)
+    div(class=buttonInner)
+      .button__text= name
+      div(class=buttoArrow)

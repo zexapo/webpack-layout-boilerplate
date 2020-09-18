@@ -1,0 +1,21 @@
+include import
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="icon" href="../assets/favicon/favicon.ico" type="image/ico")
+    title UI-kit
+  body
+    h1.title Используемые блоки
+    .block Логотип
+      +logo
+    hr
+    .block Кнопка
+    +button('зарегистрироваться')
+    .block Кнопка
+    +button('зарегистрироваться', 'small')
+    .block Кнопка
+    +button('войти', 'middle', 'white')
+    .block Кнопка
+    +button('войти', 'small', 'white')

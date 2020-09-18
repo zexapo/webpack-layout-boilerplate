@@ -1,0 +1,18 @@
+@import '../../assets/fonts/fonts.scss';
+@import '../../assets/scss/normalize.scss';
+
+// blocks
+@import '../../blocks/logo/logo.scss';
+@import '../../blocks/button/button.scss';
+
+
+html {
+  font-family: Montserrat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.block {
+  margin: 10px;
+}

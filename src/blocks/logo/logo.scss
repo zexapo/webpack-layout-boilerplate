@@ -1,0 +1,54 @@
+.logo {
+  width: 105px;
+  height: 40px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo__image {
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #BC9CFF 0%, #8BA4F9 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo__image-inner {
+  width: 35px;
+  height: 35px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo__vector-1 {
+  background-image: url('~/blocks/logo/img/vector-1.svg');
+  background-size: 100%;
+  width: 13px;
+  height: 13px;
+}
+
+.logo__vector-2 {
+  background-image: url('~/blocks/logo/img/vector-2.svg');
+  background-size: 100%;
+  box-sizing: border-box;
+  width: 10px;
+  height: 6px;
+  margin-bottom: 6px;
+}
+
+.logo__text {
+  background-image: url('~/blocks/logo/img/toxin.svg');
+  background-size: 100%;
+  box-sizing: border-box;
+  width: 53px;
+  height: 13px;
+}
